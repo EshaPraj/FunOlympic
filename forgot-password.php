@@ -1,17 +1,17 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 session_start();
+
 if (isset($_SESSION['SESSION_LOGGED_IN'])) {
-    header("Location: dashboard.php");
+    header("Location: home");
     die();
 }
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
 require 'vendor/autoload.php';
-
 include 'config.php';
+
 $msg = "";
 
 if (isset($_POST['submit'])) {
@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
 
                 $mail->isHTML(true);
                 $mail->Subject = 'no reply';
-                $mail->Body = '<h1 style="color:#4070f4;">Secure Auth</h1><p>Change the password for your account using the link below</p><b><a href="http://localhost/secure-auth/change-password.php?reset=' . $code . '">http://localhost/secure-auth/change-password.php?reset=' . $code . '</a></b>';
+                $mail->Body = '<h1 style="color:#4070f4;">Secure Auth</h1><p>Change the password for your account using the link below</p><b><a href="http://localhost/pd-finalProject/change-password.php?reset=' . $code . '">http://localhost/pd-finalProject/change-password.php?reset=' . $code . '</a></b>';
 
                 $mail->send();
             } catch (Exception $e) {
@@ -58,12 +58,12 @@ if (isset($_POST['submit'])) {
 <html lang="en">
 
 <head>
-    <title>SecureAuth | Forgot Password</title>
+    <title>title-placeholder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8" />
 
-    <link rel="stylesheet" href="css/styles.css" type="text/css" media="all" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="css/styles.css" type="text/css" media="all" />
 </head>
 
 <body>
@@ -80,12 +80,12 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="input-field button">
                         <button name="submit" name="submit" style="width: 100%; height: 50px"
-                            type="submit">Submit</button>
+                            type="submit">SUBMIT</button>
                     </div>
                 </form>
 
                 <div class="login-signup">
-                    <span class="text">Go to <a href="index.php">Login</a>.</span>
+                    <span class="text">Go back to <a href="login.php">Login</a>.</span>
                 </div>
             </div>
         </div>

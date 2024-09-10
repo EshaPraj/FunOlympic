@@ -1,16 +1,17 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 session_start();
+
 if (isset($_SESSION['SESSION_LOGGED_IN'])) {
-    header("Location: dashboard.php");
+    header("Location: home");
     die();
 }
 
 require 'vendor/autoload.php';
 include 'config.php';
+
 $msg = "";
 
 if (isset($_POST['submit'])) {
@@ -18,8 +19,8 @@ if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, ($_POST['password']));
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm-password']);
-    $current_date = date("Y/m/d");
     $code = mysqli_real_escape_string($conn, md5(rand()));
+    $is_admin = 0;
     $is_verified = 0;
 
     $sk = $_POST['g-recaptcha-response'];
@@ -45,7 +46,7 @@ if (isset($_POST['submit'])) {
                 $msg = "<div class='alert alert-danger'>This email is already registered</div>";
             } else {
                 if ($password === $confirm_password) {
-                    $sql = "INSERT INTO users (name, email, password, code, password_last_updated, is_verified) VALUES ('{$name}', '{$email}', '{$hashedPassword}', '{$code}', '{$current_date}', '{$is_verified}')";
+                    $sql = "INSERT INTO users (name, email, password, code, is_admin, is_verified) VALUES ('{$name}', '{$email}', '{$hashedPassword}', '{$code}', '{$is_admin}', '{$is_verified}')";
                     $result = mysqli_query($conn, $sql);
 
                     if ($result) {
@@ -67,7 +68,7 @@ if (isset($_POST['submit'])) {
 
                             $mail->isHTML(true);
                             $mail->Subject = 'no reply';
-                            $mail->Body = '<h1 style="color:#4070f4;">Secure Auth</h1><p>Click the link provided below to verify your account and get access to our features.</p><b><a href="http://localhost/secure-auth/?verification=' . $code . '">http://localhost/secure-auth/?verification=' . $code . '</a></b>';
+                            $mail->Body = '<h1 style="color:#4070f4;">Secure Auth</h1><p>Click the link provided below to verify your account and get access to our features.</p><b><a href="http://localhost/pd-finalProject/login.php?verification=' . $code . '">http://localhost/pd-finalProject/login.php?verification=' . $code . '</a></b>';
 
                             $mail->send();
                             echo 'Message has been sent';
@@ -96,19 +97,19 @@ if (isset($_POST['submit'])) {
 <html lang="en">
 
 <head>
-    <title>SecureAuth | Register</title>
+    <title>title-placeholder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8" />
 
-    <link rel="stylesheet" href="css/styles.css" type="text/css" media="all" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="css/styles.css" type="text/css" media="all" />
 </head>
 
 <body>
     <div class="container">
         <div class="forms">
             <div class="form login">
-                <span class="title">Registration</span>
+                <span class="title">Create an account</span>
                 <?php echo $msg; ?>
 
                 <form action="" method="post">
@@ -145,13 +146,14 @@ if (isset($_POST['submit'])) {
                         </div>
 
                         <div class="input-field button">
-                            <button name="submit" style="width: 100%; height: 50px" type="submit">Register</button>
+                            <button name="submit" style="width: 100%; height: 50px" type="submit">CREATE
+                                ACCOUNT</button>
                         </div>
                     </div>
                 </form>
                 <div class="login-signup">
                     <span class="text">Already a member?
-                        <a href="index.php" class="text login-link">Login Now</a>
+                        <a href="login.php" class="text login-link">Login Now</a>
                     </span>
                 </div>
             </div>
